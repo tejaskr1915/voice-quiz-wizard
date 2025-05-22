@@ -3,7 +3,7 @@ import React from "react";
 import Quiz from "@/components/Quiz";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { LogIn, ShieldCheck, Trophy } from "lucide-react";
+import { LogIn, ShieldCheck, Trophy, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -42,12 +42,20 @@ const Index = () => {
                 </div>
               </>
             ) : (
-              <Link to="/login">
-                <Button className="flex items-center">
-                  <LogIn className="mr-2 h-4 w-4" />
-                  Login
-                </Button>
-              </Link>
+              <div className="flex justify-center gap-2">
+                <Link to="/login">
+                  <Button className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    User Login
+                  </Button>
+                </Link>
+                <Link to="/admin-login">
+                  <Button variant="outline" className="flex items-center">
+                    <ShieldCheck className="mr-2 h-4 w-4" />
+                    Admin Login
+                  </Button>
+                </Link>
+              </div>
             )}
           </div>
         </header>

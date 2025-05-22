@@ -6,34 +6,34 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, User } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { loginUser } = useAuth();
+  const { loginAdmin } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const success = await loginUser(email, password);
+      const success = await loginAdmin(email, password);
       
       if (success) {
         toast({
-          title: "Login successful",
-          description: "Welcome back to the Quiz App",
+          title: "Admin login successful",
+          description: "Welcome to the admin dashboard",
         });
-        navigate("/");
+        navigate("/admin");
       } else {
         toast({
           variant: "destructive",
           title: "Login failed",
-          description: "Invalid email or password. Try user@example.com / user123",
+          description: "Invalid admin credentials. Try admin@example.com / admin123",
         });
       }
     } catch (error) {
@@ -52,11 +52,11 @@ const Login = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-2">
-            <User className="h-8 w-8 text-primary" />
+            <ShieldCheck className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">User Login</CardTitle>
+          <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>
-            Enter your credentials to access the quiz app
+            Enter your admin credentials to access the dashboard
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -70,7 +70,7 @@ const Login = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="user@example.com"
+                placeholder="admin@example.com"
                 required
               />
             </div>
@@ -83,19 +83,19 @@ const Login = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="user123"
+                placeholder="admin123"
                 required
               />
             </div>
             <div className="pt-2">
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
+                {isLoading ? "Logging in..." : "Login as Admin"}
               </Button>
             </div>
           </form>
           <div className="mt-4 flex items-center justify-between">
-            <Link to="/admin-login" className="text-sm text-blue-600 hover:underline">
-              Admin Login
+            <Link to="/login" className="text-sm text-blue-600 hover:underline">
+              User Login
             </Link>
             <Link to="/" className="text-sm text-gray-500 hover:underline flex items-center">
               <ArrowLeft className="mr-1 h-4 w-4" />
@@ -108,4 +108,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

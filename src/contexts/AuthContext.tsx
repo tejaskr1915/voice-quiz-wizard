@@ -11,7 +11,8 @@ type User = {
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  loginAdmin: (email: string, password: string) => Promise<boolean>;
+  loginUser: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 };
 
@@ -39,10 +40,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const loginAdmin = async (email: string, password: string): Promise<boolean> => {
     // In a real app, this would be an API call
     const foundUser = MOCK_USERS.find(
-      (u) => u.email === email && u.password === password
+      (u) => u.email === email && u.password === password && u.role === "admin"
+    );
+
+    if (foundUser) {
+      // Extract user without the password
+      const { password: _, ...userWithoutPassword } = foundUser;
+      setUser(userWithoutPassword);
+      localStorage.setItem("quizUser", JSON.stringify(userWithoutPassword));
+      return true;
+    }
+    return false;
+  };
+
+  const loginUser = async (email: string, password: string): Promise<boolean> => {
+    // In a real app, this would be an API call
+    const foundUser = MOCK_USERS.find(
+      (u) => u.email === email && u.password === password && u.role === "user"
     );
 
     if (foundUser) {
@@ -61,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loginAdmin, loginUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
