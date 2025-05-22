@@ -11,6 +11,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { quizData } from "@/data/quiz-data";
 
+// Add the missing SpeechRecognition type
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+}
+
 // Mock video URLs with placeholders
 const mockVideos = [
   "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
