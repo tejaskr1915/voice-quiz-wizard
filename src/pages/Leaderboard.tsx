@@ -3,7 +3,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Medal, Trophy } from "lucide-react";
+import { ArrowLeft, Medal, Trophy, ShieldCheck } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Mock leaderboard data - this would come from a database in a real app
 const mockLeaderboard = [
@@ -15,15 +16,21 @@ const mockLeaderboard = [
 ];
 
 const Leaderboard = () => {
+  const { user } = useAuth();
+  
   return (
     <div className="min-h-screen p-4 md:p-8 bg-gradient-to-br from-blue-50 to-purple-50">
       <div className="max-w-4xl mx-auto">
         <header className="text-center mb-8">
           <h1 className="text-4xl font-bold text-quiz-primary mb-2 flex items-center justify-center">
             <Trophy className="mr-3 h-8 w-8" />
-            Leaderboard
+            Admin Leaderboard
+            <ShieldCheck className="ml-3 h-6 w-6 text-amber-600" />
           </h1>
-          <p className="text-gray-600">Top quiz performers</p>
+          <p className="text-gray-600">Top quiz performers (Admin view)</p>
+          <p className="text-sm mt-2 text-amber-600">
+            Logged in as {user?.name} ({user?.role})
+          </p>
         </header>
         
         <div className="bg-white p-6 rounded-lg shadow-md">
@@ -55,11 +62,17 @@ const Leaderboard = () => {
             </TableBody>
           </Table>
           
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-center gap-2">
             <Link to="/">
               <Button className="flex items-center">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Quiz
+              </Button>
+            </Link>
+            <Link to="/admin">
+              <Button variant="outline" className="flex items-center">
+                <ShieldCheck className="mr-2 h-4 w-4" />
+                Admin Dashboard
               </Button>
             </Link>
           </div>

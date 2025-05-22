@@ -1,12 +1,13 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Edit, Eye, Trash, Lock, Unlock, Plus } from "lucide-react";
+import { ArrowLeft, Edit, Eye, Trash, Lock, Unlock, Plus, Trophy } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Mock questions data
 const mockQuestions = [
@@ -25,86 +26,7 @@ const mockUsers = [
 ];
 
 const Admin = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  // Mock login function - in a real app this would connect to a backend
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Mock credentials (in a real app, this would be validated against a database)
-    if (username === "admin" && password === "password") {
-      setIsAuthenticated(true);
-      toast({
-        title: "Logged in successfully",
-        description: "Welcome to the admin dashboard",
-      });
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Login failed",
-        description: "Invalid username or password",
-      });
-    }
-  };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-blue-50 to-purple-50">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Admin Login</CardTitle>
-            <CardDescription>
-              Enter your credentials to access the admin dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <label htmlFor="username" className="text-sm font-medium">
-                  Username
-                </label>
-                <input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                  placeholder="admin"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 p-2"
-                  placeholder="password"
-                  required
-                />
-              </div>
-              <div className="pt-2">
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
-              </div>
-            </form>
-            <div className="mt-4 text-center text-sm text-gray-500">
-              <Link to="/" className="underline">
-                Back to Quiz
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const { user, logout } = useAuth();
 
   return (
     <div className="min-h-screen p-4 md:p-8 bg-gradient-to-br from-blue-50 to-purple-50">
@@ -114,11 +36,14 @@ const Admin = () => {
           <div className="flex justify-between items-center">
             <p className="text-gray-600">Manage questions, users, and view statistics</p>
             <div className="flex space-x-2">
+              <span className="text-sm text-amber-600 mr-2 my-auto">
+                Logged in as {user?.name}
+              </span>
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={() => {
-                  setIsAuthenticated(false);
+                  logout();
                   toast({ description: "Logged out successfully" });
                 }}
               >
@@ -128,6 +53,12 @@ const Admin = () => {
                 <Button size="sm" variant="outline">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Quiz
+                </Button>
+              </Link>
+              <Link to="/leaderboard">
+                <Button size="sm" variant="outline">
+                  <Trophy className="mr-2 h-4 w-4" />
+                  Leaderboard
                 </Button>
               </Link>
             </div>
